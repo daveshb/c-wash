@@ -1,6 +1,5 @@
 import RPi.GPIO as GPIO
 import time
-from threading import Thread
 
 # Configuración básica
 GPIO.setmode(GPIO.BCM)
@@ -18,9 +17,9 @@ def mover_grado(angulo):
     duty = 2.5 + (angulo / 18)
     pwm.ChangeDutyCycle(duty)
     time.sleep(4)  # pequeña pausa para que el servo se mueva
-    pwm.ChangeDutyCycle(0)  # detener señal para evitar zumbidos
+                pwm.ChangeDutyCycle(0)  # detener señal para evitar zumbidos
 
-def activar_servo(duration=30):
+def activar_servo(duration=2):
     """Mueve el servo durante 30 segundos"""
     print(f"Servo activado por {duration} segundos...")
     start_time = time.time()
@@ -30,24 +29,16 @@ def activar_servo(duration=30):
         mover_grado(180)
     print("Servo detenido")
 
-def boton_presionado(channel):
-    """Callback cuando se presiona el botón"""
-    print("Botón presionado!")
-    thread = Thread(target=activar_servo)
-    thread.start()
-
-
-if GPIO.input(BUTTON_PIN) == GPIO.LOW:  # Botón presionado
-            print("Botón presionado!")
-            time.sleep(0.3)
-
 # Detectar evento del botón
-GPIO.add_event_detect(BUTTON_PIN, GPIO.FALLING, callback=boton_presionado, bouncetime=200)
+
 
 try:
     print("Esperando que presiones el botón...")
     while True:
-        time.sleep(1)
+        if GPIO.input(BUTTON_PIN) == GPIO.LOW:  # Botón presionado
+            print("Botón presionado!")
+            activar_servo()
+            time.sleep(0.3)
 
 except KeyboardInterrupt:
     pass
