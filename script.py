@@ -16,17 +16,13 @@ def mover_grado(angulo):
     # Conversión aproximada: 0°->2.5%, 180°->12.5%
     duty = 2.5 + (angulo / 18)
     pwm.ChangeDutyCycle(duty)
-    time.sleep(4)  # pequeña pausa para que el servo se mueva
-                pwm.ChangeDutyCycle(0)  # detener señal para evitar zumbidos
+    time.sleep(2)  # 2 segundos moviéndose
+    pwm.ChangeDutyCycle(0)  # detener señal para evitar zumbidos
 
 def activar_servo(duration=2):
-    """Mueve el servo durante 30 segundos"""
+    """Mueve el servo durante 2 segundos"""
     print(f"Servo activado por {duration} segundos...")
-    start_time = time.time()
-    while time.time() - start_time < duration:
-        mover_grado(0)
-        mover_grado(90)
-        mover_grado(180)
+    mover_grado(90)
     print("Servo detenido")
 
 # Detectar evento del botón
