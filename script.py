@@ -36,6 +36,11 @@ def boton_presionado(channel):
     thread = Thread(target=activar_servo)
     thread.start()
 
+
+if GPIO.input(BUTTON_PIN) == GPIO.LOW:  # Botón presionado
+            print("Botón presionado!")
+            time.sleep(0.3)
+
 # Detectar evento del botón
 GPIO.add_event_detect(BUTTON_PIN, GPIO.FALLING, callback=boton_presionado, bouncetime=200)
 
