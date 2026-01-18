@@ -72,3 +72,42 @@ finally:
     servo_pwm.stop()
     GPIO.cleanup()
     print("GPIO cleaned up")
+
+
+
+
+//
+
+
+# Configuración básica
+GPIO.setmode(GPIO.BCM)
+SERVO_PIN = 24
+GPIO.setup(SERVO_PIN, GPIO.OUT)
+
+# Frecuencia típica para servos: 50 Hz
+pwm = GPIO.PWM(SERVO_PIN, 50)
+pwm.start(0)
+
+def mover_grado(angulo):
+    # Conversión aproximada: 0°->2.5%, 180°->12.5%
+    duty = 2.5 + (angulo / 18)
+    pwm.ChangeDutyCycle(duty)
+    time.sleep(4)  # pequeña pausa para que el servo se mueva
+    pwm.ChangeDutyCycle(0)  # detener señal para evitar zumbidos
+
+try:
+    while True:
+        print("Moviendo a 0°")
+        mover_grado(0)
+
+        print("Moviendo a 90°")
+        mover_grado(90)
+
+        print("Moviendo a 180°")
+        mover_grado(180)
+
+except KeyboardInterrupt:
+    pass
+
+pwm.stop()
+GPIO.cleanup()
